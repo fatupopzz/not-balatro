@@ -1,0 +1,75 @@
+.joker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.joker-box {
+  background: var(--bg-panel);
+  border: 2px solid var(--border-accent);
+  padding: 40px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 500px;
+  width: 90%;
+}
+
+.joker-box h2 {
+  font-size: 36px;
+  color: var(--accent-yellow);
+  letter-spacing: 4px;
+}
+
+.joker-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.joker-options {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.joker-card {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border-accent);
+  padding: 20px 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.joker-card:hover {
+  border-color: var(--accent-yellow);
+  background: #1f1a08;
+}
+
+.joker-icon {
+  font-size: 32px;
+}
+
+.joker-name {
+  font-size: 14px;
+  color: var(--text-bright);
+  letter-spacing: 1px;
+}
+
+.joker-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
