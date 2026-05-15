@@ -1,3 +1,5 @@
+import './Card.css'
+
 const SUIT_SYMBOLS = {
   hearts: '♥',
   diamonds: '♦',
