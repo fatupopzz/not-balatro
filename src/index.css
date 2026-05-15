@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'FiveNights';
+  src: url('/fonts/FiveFontsatFreddys-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --bg: #0a0a0a;
   --bg-card: #1a1410;
@@ -10,8 +17,8 @@
   --accent-red: #8b1a1a;
   --accent-yellow: #c8a020;
   --accent-glow: #ff4444;
-  --font-title: 'Creepster', cursive;
-  --font-body: 'Special Elite', cursive;
+  --font-title: 'FiveNights', sans-serif;
+  --font-body: 'FiveNights', sans-serif;
 }
 
 * {
