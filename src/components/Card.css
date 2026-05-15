@@ -20,8 +20,8 @@
 
 .card-selected {
   transform: translateY(-12px);
-  border-color: var(--accent-glow);
-  background: #1f1008;
+  border: 2px solid var(--accent-glow);
+  background: #f5f0e8;
 }
 
 .card-corner {
