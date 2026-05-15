@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { createDeck, shuffleDeck } from './data/deck'
+import { getRandomJokers } from './data/jokers'
 import Card from './components/Card'
+import GameOver from './components/GameOver'
+import JokerSelection from './components/JokerSelection'
 import './App.css'
 
 function App() {
@@ -10,8 +13,16 @@ function App() {
   const [score, setScore] = useState(0)
   const [target, setTarget] = useState(100)
   const [round, setRound] = useState(1)
+  const [activeJoker, setActiveJoker] = useState(null)
+  const [showJokers, setShowJokers] = useState(false)
+  const [jokerOptions, setJokerOptions] = useState([])
+  const [gameOver, setGameOver] = useState(false)
 
   function dealHand(currentDeck) {
+    if (currentDeck.length < 8) {
+      setGameOver(true)
+      return
+    }
     const newHand = currentDeck.slice(0, 8)
     const remaining = currentDeck.slice(8)
     setHand(newHand)
@@ -27,8 +38,70 @@ function App() {
     }
   }
 
+  function playHand() {
+    if (selected.length < 2) return
+    const selectedCards = selected.map(i => hand[i])
+    let points = selected.length * 10
+
+    if (activeJoker) {
+      points = activeJoker.apply(points, selectedCards)
+    }
+
+    const newScore = score + points
+
+    const remaining = hand.filter((_, i) => !selected.includes(i))
+    setHand(remaining)
+    setSelected([])
+    setScore(newScore)
+
+    if (newScore >= target) {
+      const options = getRandomJokers(2)
+      setJokerOptions(options)
+      setShowJokers(true)
+    } else if (deck.length === 0 && remaining.length === 0) {
+      setGameOver(true)
+    }
+  }
+
+  function discard() {
+    if (selected.length === 0) return
+    const remaining = hand.filter((_, i) => !selected.includes(i))
+    const newCards = deck.slice(0, selected.length)
+    const newDeck = deck.slice(selected.length)
+    setHand([...remaining, ...newCards])
+    setDeck(newDeck)
+    setSelected([])
+  }
+
+  function selectJoker(joker) {
+    setActiveJoker(joker)
+    setShowJokers(false)
+    setRound(round + 1)
+    setTarget(target + 50)
+    const newDeck = shuffleDeck(createDeck())
+    dealHand(newDeck)
+    setDeck(newDeck.slice(8))
+    setScore(0)
+  }
+
+  function restart() {
+    const newDeck = shuffleDeck(createDeck())
+    setDeck(newDeck)
+    setHand([])
+    setSelected([])
+    setScore(0)
+    setTarget(100)
+    setRound(1)
+    setActiveJoker(null)
+    setShowJokers(false)
+    setGameOver(false)
+  }
+
   return (
     <div className="app">
+      {gameOver && <GameOver score={score} onRestart={restart} />}
+      {showJokers && <JokerSelection jokers={jokerOptions} onSelect={selectJoker} />}
+
       <header className="navbar">
         <span>Ronda {round}</span>
         <h1>Not Balatro</h1>
@@ -46,8 +119,10 @@ function App() {
             <span className="score-number">{target}</span>
           </div>
           <div className="score-box">
-            <span className="score-label">Mano</span>
-            <span className="score-number score-hand">— selecciona</span>
+            <span className="score-label">Joker activo</span>
+            <span className="score-hand">
+              {activeJoker ? activeJoker.name : '— ninguno'}
+            </span>
           </div>
         </section>
 
@@ -71,8 +146,12 @@ function App() {
 
         {hand.length > 0 && (
           <section className="actions">
-            <button disabled={selected.length < 2}>Jugar mano</button>
-            <button disabled={selected.length === 0}>Descartar</button>
+            <button onClick={playHand} disabled={selected.length < 2}>
+              Jugar mano
+            </button>
+            <button onClick={discard} disabled={selected.length === 0}>
+              Descartar
+            </button>
           </section>
         )}
       </main>
