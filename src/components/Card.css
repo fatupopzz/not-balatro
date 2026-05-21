@@ -93,3 +93,18 @@
   border: 2px solid var(--accent-glow);
   background: #f5f0e8;
 }
+
+@media (max-width: 768px) {
+  .card {
+    width: 52px;
+    height: 80px;
+  }
+
+  .card-center {
+    font-size: 18px;
+  }
+
+  .card-value {
+    font-size: 11px;
+  }
+}

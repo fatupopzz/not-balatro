@@ -100,3 +100,36 @@ button:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px 16px;
+  }
+
+  .navbar h1 {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+
+  .navbar span {
+    font-size: 11px;
+  }
+
+  .gameboard {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .score-panel {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .score-number {
+    font-size: 24px;
+  }
+
+  .hand {
+    gap: 6px;
+  }
+}
