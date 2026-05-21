@@ -138,14 +138,15 @@ function App() {
               {hand.length === 0 ? (
                 <button onClick={() => dealHand(deck)}>Repartir cartas</button>
               ) : (
-                hand.map((card, i) => (
-                  <Card
-                    key={i}
-                    card={card}
-                    selected={selected.includes(i)}
-                    onClick={() => toggleCard(i)}
-                  />
-                ))
+               hand.map((card, i) => (
+  <Card
+    key={i}
+    card={card}
+    index={i}
+    selected={selected.includes(i)}
+    onClick={() => toggleCard(i)}
+  />
+))
               )}
             </div>
           </section>

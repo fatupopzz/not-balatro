@@ -9,19 +9,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s, border-color 0.15s;
   user-select: none;
+  animation: dealCard 0.3s ease forwards;
+  transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-10px) scale(1.05) rotate(-1deg);
   border-color: var(--accent-yellow);
 }
 
 .card-selected {
-  transform: translateY(-12px);
+  animation: none;
+  transform: translateY(-16px) scale(1.08);
   border: 2px solid var(--accent-glow);
   background: #f5f0e8;
+  transition: transform 0.15s ease;
+}
+
+.card-selected:hover {
+  transform: translateY(-20px) scale(1.1) rotate(1deg);
 }
 
 .card-corner {
@@ -63,4 +70,26 @@
 .card-black .card-suit,
 .card-black .card-center {
   color: #1a1a1a;
+}
+
+@keyframes dealCard {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: dealCard 0.3s ease forwards;
+}
+
+.card-selected {
+  animation: none;
+  transform: translateY(-12px);
+  border: 2px solid var(--accent-glow);
+  background: #f5f0e8;
 }
