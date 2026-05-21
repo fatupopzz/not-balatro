@@ -1,0 +1,47 @@
+.menu {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+}
+
+.menu-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
+  padding: 48px;
+  border: 2px solid var(--border-accent);
+  background: var(--bg-panel);
+}
+
+.menu-title {
+  font-size: 72px;
+  color: var(--accent-yellow);
+  letter-spacing: 8px;
+  line-height: 1;
+}
+
+.menu-subtitle {
+  font-size: 16px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+}
+
+.menu-btn {
+  font-size: 18px;
+  padding: 14px 48px;
+  border: 2px solid var(--accent-yellow);
+  color: var(--accent-yellow);
+  background: transparent;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.menu-btn:hover {
+  background: var(--accent-yellow);
+  color: var(--bg);
+}

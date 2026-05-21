@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Menu from './components/Menu'
 import { createDeck, shuffleDeck } from './data/deck'
 import { getRandomJokers } from './data/jokers'
 import Card from './components/Card'
@@ -7,6 +8,7 @@ import JokerSelection from './components/JokerSelection'
 import './App.css'
 
 function App() {
+  const [inMenu, setInMenu] = useState(true)
   const [deck, setDeck] = useState(() => shuffleDeck(createDeck()))
   const [hand, setHand] = useState([])
   const [selected, setSelected] = useState([])
@@ -98,65 +100,71 @@ function App() {
   }
 
   return (
-    <div className="app">
-      {gameOver && <GameOver score={score} onRestart={restart} />}
-      {showJokers && <JokerSelection jokers={jokerOptions} onSelect={selectJoker} />}
+  <div className="app">
+    {inMenu ? (
+      <Menu onStart={() => setInMenu(false)} />
+    ) : (
+      <>
+        {gameOver && <GameOver score={score} onRestart={restart} />}
+        {showJokers && <JokerSelection jokers={jokerOptions} onSelect={selectJoker} />}
 
-      <header className="navbar">
-        <span>Ronda {round}</span>
-        <h1>Not Balatro</h1>
-        <span>Cartas: {deck.length}</span>
-      </header>
+        <header className="navbar">
+          <span>Ronda {round}</span>
+          <h1>Not Balatro</h1>
+          <span>Cartas: {deck.length}</span>
+        </header>
 
-      <main className="gameboard">
-        <section className="score-panel">
-          <div className="score-box">
-            <span className="score-label">Puntaje</span>
-            <span className="score-number">{score}</span>
-          </div>
-          <div className="score-box">
-            <span className="score-label">Objetivo</span>
-            <span className="score-number">{target}</span>
-          </div>
-          <div className="score-box">
-            <span className="score-label">Joker activo</span>
-            <span className="score-hand">
-              {activeJoker ? activeJoker.name : '— ninguno'}
-            </span>
-          </div>
-        </section>
-
-        <section className="hand-area">
-          <p className="hand-label">Tu mano — selecciona 2 a 5 cartas</p>
-          <div className="hand">
-            {hand.length === 0 ? (
-              <button onClick={() => dealHand(deck)}>Repartir cartas</button>
-            ) : (
-              hand.map((card, i) => (
-                <Card
-                  key={i}
-                  card={card}
-                  selected={selected.includes(i)}
-                  onClick={() => toggleCard(i)}
-                />
-              ))
-            )}
-          </div>
-        </section>
-
-        {hand.length > 0 && (
-          <section className="actions">
-            <button onClick={playHand} disabled={selected.length < 2}>
-              Jugar mano
-            </button>
-            <button onClick={discard} disabled={selected.length === 0}>
-              Descartar
-            </button>
+        <main className="gameboard">
+          <section className="score-panel">
+            <div className="score-box">
+              <span className="score-label">Puntaje</span>
+              <span className="score-number">{score}</span>
+            </div>
+            <div className="score-box">
+              <span className="score-label">Objetivo</span>
+              <span className="score-number">{target}</span>
+            </div>
+            <div className="score-box">
+              <span className="score-label">Joker activo</span>
+              <span className="score-hand">
+                {activeJoker ? activeJoker.name : '— ninguno'}
+              </span>
+            </div>
           </section>
-        )}
-      </main>
-    </div>
-  )
+
+          <section className="hand-area">
+            <p className="hand-label">Tu mano — selecciona 2 a 5 cartas</p>
+            <div className="hand">
+              {hand.length === 0 ? (
+                <button onClick={() => dealHand(deck)}>Repartir cartas</button>
+              ) : (
+                hand.map((card, i) => (
+                  <Card
+                    key={i}
+                    card={card}
+                    selected={selected.includes(i)}
+                    onClick={() => toggleCard(i)}
+                  />
+                ))
+              )}
+            </div>
+          </section>
+
+          {hand.length > 0 && (
+            <section className="actions">
+              <button onClick={playHand} disabled={selected.length < 2}>
+                Jugar mano
+              </button>
+              <button onClick={discard} disabled={selected.length === 0}>
+                Descartar
+              </button>
+            </section>
+          )}
+        </main>
+      </>
+    )}
+  </div>
+)
 }
 
 export default App
