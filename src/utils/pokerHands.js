@@ -9,6 +9,31 @@ function hasFlush(cards) {
   return Object.values(suitCounts).some((count) => count >= 5)
 }
 
+function getGroupedCounts(cards) {
+  const valueCounts = countCardsByValue(cards)
+  return Object.values(valueCounts).sort((a, b) => b - a)
+}
+
+function hasFourOfAKind(counts) {
+  return counts[0] === 4
+}
+
+function hasFullHouse(counts) {
+  return counts[0] === 3 && counts[1] >= 2
+}
+
+function hasThreeOfAKind(counts) {
+  return counts[0] === 3
+}
+
+function hasTwoPair(counts) {
+  return counts[0] === 2 && counts[1] === 2
+}
+
+function hasPair(counts) {
+  return counts[0] === 2
+}
+
 function hasStraight(cards) {
   const values = [...new Set(getSortedCardValues(cards))]
 
@@ -40,8 +65,7 @@ export function evaluatePokerHand(cards) {
     }
   }
 
-  const valueCounts = countCardsByValue(cards)
-  const counts = Object.values(valueCounts).sort((a, b) => b - a)
+  const counts = getGroupedCounts(cards)
 
   const isFlush = hasFlush(cards)
   const isStraight = hasStraight(cards)
@@ -54,19 +78,19 @@ export function evaluatePokerHand(cards) {
 
   if (isStraight && isFlush) {
     hand = { name: 'Straight Flush', baseScore: 120, multiplier: 4 }
-  } else if (counts[0] === 4) {
+  } else if (hasFourOfAKind(counts)) {
     hand = { name: 'Four of a Kind', baseScore: 100, multiplier: 3.5 }
-  } else if (counts[0] === 3 && counts[1] >= 2) {
+  } else if (hasFullHouse(counts)) {
     hand = { name: 'Full House', baseScore: 90, multiplier: 3 }
   } else if (isFlush) {
     hand = { name: 'Flush', baseScore: 75, multiplier: 2.5 }
   } else if (isStraight) {
     hand = { name: 'Straight', baseScore: 70, multiplier: 2.3 }
-  } else if (counts[0] === 3) {
+  } else if (hasThreeOfAKind(counts)) {
     hand = { name: 'Three of a Kind', baseScore: 55, multiplier: 2 }
-  } else if (counts[0] === 2 && counts[1] === 2) {
+  } else if (hasTwoPair(counts)) {
     hand = { name: 'Two Pair', baseScore: 45, multiplier: 1.7 }
-  } else if (counts[0] === 2) {
+  } else if (hasPair(counts)) {
     hand = { name: 'Pair', baseScore: 35, multiplier: 1.4 }
   }
 
