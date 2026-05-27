@@ -56,13 +56,18 @@ function App() {
     const newScore = score + points
     const remaining = hand.filter((_, i) => !selected.includes(i))
 
+    const cardsNeeded = selected.length
+    const newCards = deck.slice(0, cardsNeeded)
+    const updatedDeck = deck.slice(cardsNeeded)
+
     setLastHand({
       name: handResult.name,
       baseScore: handResult.baseScore,
       multiplier: handResult.multiplier,
       total: points
     })
-    setHand(remaining)
+    setHand([...remaining, ...newCards])
+    setDeck(updatedDeck)
     setSelected([])
     setScore(newScore)
 
@@ -70,7 +75,7 @@ function App() {
       const options = getRandomJokers(2)
       setJokerOptions(options)
       setShowJokers(true)
-    } else if (deck.length === 0 && remaining.length === 0) {
+    } else if (updatedDeck.length === 0 && remaining.length === 0) {
       setGameOver(true)
     }
   }
