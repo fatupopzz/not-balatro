@@ -5,6 +5,7 @@ import { getRandomJokers } from './data/jokers'
 import Card from './components/Card'
 import GameOver from './components/GameOver'
 import JokerSelection from './components/JokerSelection'
+import { evaluatePokerHand } from './utils/pokerHands'
 import './App.css'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   const [showJokers, setShowJokers] = useState(false)
   const [jokerOptions, setJokerOptions] = useState([])
   const [gameOver, setGameOver] = useState(false)
+  const [lastHand, setLastHand] = useState(null)
 
   function dealHand(currentDeck) {
     if (currentDeck.length < 8) {
@@ -42,16 +44,24 @@ function App() {
 
   function playHand() {
     if (selected.length < 2) return
+
     const selectedCards = selected.map(i => hand[i])
-    let points = selected.length * 10
+    const handResult = evaluatePokerHand(selectedCards)
+    let points = handResult.total
 
     if (activeJoker) {
       points = activeJoker.apply(points, selectedCards)
     }
 
     const newScore = score + points
-
     const remaining = hand.filter((_, i) => !selected.includes(i))
+
+    setLastHand({
+      name: handResult.name,
+      baseScore: handResult.baseScore,
+      multiplier: handResult.multiplier,
+      total: points
+    })
     setHand(remaining)
     setSelected([])
     setScore(newScore)
@@ -73,6 +83,7 @@ function App() {
     setHand([...remaining, ...newCards])
     setDeck(newDeck)
     setSelected([])
+    setLastHand(null)
   }
 
   function selectJoker(joker) {
@@ -84,6 +95,7 @@ function App() {
     dealHand(newDeck)
     setDeck(newDeck.slice(8))
     setScore(0)
+    setLastHand(null)
   }
 
   function restart() {
@@ -97,6 +109,7 @@ function App() {
     setActiveJoker(null)
     setShowJokers(false)
     setGameOver(false)
+    setLastHand(null)
   }
 
   return (
@@ -128,6 +141,12 @@ function App() {
               <span className="score-label">Joker activo</span>
               <span className="score-hand">
                 {activeJoker ? activeJoker.name : '— ninguno'}
+              </span>
+            </div>
+            <div className="score-box">
+              <span className="score-label">Última mano</span>
+              <span className="score-hand">
+                {lastHand ? `${lastHand.name} +${lastHand.total}` : '— sin jugar'}
               </span>
             </div>
           </section>
