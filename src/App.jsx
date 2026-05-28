@@ -115,8 +115,11 @@ function App() {
 
   function restart() {
     const newDeck = shuffleDeck(createDeck())
-    setDeck(newDeck)
-    setHand([])
+    const newHand = newDeck.slice(0, 8)
+    const remainingDeck = newDeck.slice(8)
+
+    setDeck(remainingDeck)
+    setHand(newHand)
     setSelected([])
     setScore(0)
     setTarget(100)
