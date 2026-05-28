@@ -127,7 +127,7 @@ function App() {
     setActiveJoker(joker)
     setShowJokers(false)
     setRound(round + 1)
-    setTarget(target + 50)
+    setTarget(target + DIFFICULTIES[difficulty].targetIncrease)
     const newDeck = shuffleDeck(createDeck())
     dealHand(newDeck)
     setDeck(newDeck.slice(8))
@@ -144,7 +144,7 @@ function App() {
     setHand(newHand)
     setSelected([])
     setScore(0)
-    setTarget(100)
+    setTarget(DIFFICULTIES[difficulty].initialTarget)
     setRound(1)
     setActiveJoker(null)
     setShowJokers(false)
@@ -156,7 +156,14 @@ function App() {
   return (
   <div className="app">
     {inMenu ? (
-      <Menu onStart={() => setInMenu(false)} />
+      <Menu
+        onStart={() => {
+          setTarget(DIFFICULTIES[difficulty].initialTarget)
+          setInMenu(false)
+        }}
+        difficulty={difficulty}
+        onDifficultyChange={setDifficulty}
+      />
     ) : (
       <>
         {gameOver && <GameOver score={score} onRestart={restart} />}
@@ -181,6 +188,10 @@ function App() {
             <div className="score-box">
               <span className="score-label">Vidas</span>
               <span className="score-number">{lives}</span>
+            </div>
+            <div className="score-box">
+              <span className="score-label">Dificultad</span>
+              <span className="score-hand">{DIFFICULTIES[difficulty].label}</span>
             </div>
             <div className="score-box">
               <span className="score-label">Joker activo</span>
