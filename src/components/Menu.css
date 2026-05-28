@@ -30,6 +30,33 @@
   letter-spacing: 2px;
 }
 
+.difficulty-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.difficulty-selector label {
+  color: var(--text-muted);
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.difficulty-selector select {
+  background: var(--bg-panel);
+  color: var(--accent-yellow);
+  border: 2px solid var(--accent-yellow);
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.difficulty-selector select:hover {
+  background: rgba(209, 174, 35, 0.1);
+}
+
 .menu-btn {
   font-size: 18px;
   padding: 14px 48px;
