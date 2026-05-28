@@ -21,6 +21,7 @@ function App() {
   const [jokerOptions, setJokerOptions] = useState([])
   const [gameOver, setGameOver] = useState(false)
   const [lastHand, setLastHand] = useState(null)
+  const [lives, setLives] = useState(3)
 
   function dealHand(currentDeck) {
     if (currentDeck.length < 8) {
@@ -76,7 +77,15 @@ function App() {
       setJokerOptions(options)
       setShowJokers(true)
     } else if (updatedDeck.length === 0 && remaining.length === 0) {
-      setGameOver(true)
+      if (lives <= 1) {
+        setGameOver(true)
+      } else {
+        const newDeck = shuffleDeck(createDeck())
+        setLives(lives - 1)
+        setScore(0)
+        setLastHand(null)
+        dealHand(newDeck)
+      }
     }
   }
 
@@ -115,6 +124,7 @@ function App() {
     setShowJokers(false)
     setGameOver(false)
     setLastHand(null)
+    setLives(3)
   }
 
   return (
