@@ -76,7 +76,7 @@ function App() {
       const options = getRandomJokers(2)
       setJokerOptions(options)
       setShowJokers(true)
-    } else if (updatedDeck.length === 0 && remaining.length === 0) {
+    } else if (updatedDeck.length === 0 && [...remaining, ...newCards].length < 2) {
       if (lives <= 1) {
         setGameOver(true)
       } else {
@@ -85,6 +85,7 @@ function App() {
         setScore(0)
         setLastHand(null)
         dealHand(newDeck)
+        setDeck(newDeck.slice(8))
       }
     }
   }
