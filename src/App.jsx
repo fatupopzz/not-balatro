@@ -8,13 +8,32 @@ import JokerSelection from './components/JokerSelection'
 import { evaluatePokerHand } from './utils/pokerHands'
 import './App.css'
 
+const DIFFICULTIES = {
+  easy: {
+    label: 'Fácil',
+    initialTarget: 80,
+    targetIncrease: 40
+  },
+  normal: {
+    label: 'Normal',
+    initialTarget: 100,
+    targetIncrease: 50
+  },
+  hard: {
+    label: 'Difícil',
+    initialTarget: 130,
+    targetIncrease: 70
+  }
+}
+
 function App() {
   const [inMenu, setInMenu] = useState(true)
   const [deck, setDeck] = useState(() => shuffleDeck(createDeck()))
   const [hand, setHand] = useState([])
   const [selected, setSelected] = useState([])
   const [score, setScore] = useState(0)
-  const [target, setTarget] = useState(100)
+  const [difficulty, setDifficulty] = useState('normal')
+  const [target, setTarget] = useState(DIFFICULTIES.normal.initialTarget)
   const [round, setRound] = useState(1)
   const [activeJoker, setActiveJoker] = useState(null)
   const [showJokers, setShowJokers] = useState(false)
