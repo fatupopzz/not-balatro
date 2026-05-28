@@ -153,6 +153,10 @@ function App() {
               <span className="score-number">{target}</span>
             </div>
             <div className="score-box">
+              <span className="score-label">Vidas</span>
+              <span className="score-number">{lives}</span>
+            </div>
+            <div className="score-box">
               <span className="score-label">Joker activo</span>
               <span className="score-hand">
                 {activeJoker ? activeJoker.name : '— ninguno'}
