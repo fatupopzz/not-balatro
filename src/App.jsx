@@ -92,9 +92,12 @@ function App() {
 
   function discard() {
     if (selected.length === 0) return
+
     const remaining = hand.filter((_, i) => !selected.includes(i))
-    const newCards = deck.slice(0, selected.length)
-    const newDeck = deck.slice(selected.length)
+    const cardsToDraw = Math.min(selected.length, deck.length)
+    const newCards = deck.slice(0, cardsToDraw)
+    const newDeck = deck.slice(cardsToDraw)
+
     setHand([...remaining, ...newCards])
     setDeck(newDeck)
     setSelected([])
