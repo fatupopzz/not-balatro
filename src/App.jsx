@@ -2,9 +2,11 @@ import { useState } from 'react'
 import Menu from './components/Menu'
 import { createDeck, shuffleDeck } from './data/deck'
 import { getRandomJokers } from './data/jokers'
+import { evaluateHand } from './utils/handEvaluator'
 import Card from './components/Card'
 import GameOver from './components/GameOver'
 import JokerSelection from './components/JokerSelection'
+import Victory from './components/Victory'
 import './App.css'
 
 function App() {
@@ -20,6 +22,7 @@ function App() {
   const [jokerOptions, setJokerOptions] = useState([])
   const [gameOver, setGameOver] = useState(false)
   const [lives, setLives] = useState(3)
+  const [showVictory, setShowVictory] = useState(false)
 
   function dealHand(currentDeck) {
     if (currentDeck.length < 8) {
@@ -44,7 +47,8 @@ function App() {
   function playHand() {
     if (selected.length < 2) return
     const selectedCards = selected.map(i => hand[i])
-    let points = selected.length * 10
+    const { score: handScore } = evaluateHand(selectedCards)
+    let points = handScore * 10
 
     if (activeJoker) {
       points = activeJoker.apply(points, selectedCards)
@@ -57,9 +61,7 @@ function App() {
     setScore(newScore)
 
     if (newScore >= target) {
-      const options = getRandomJokers(2)
-      setJokerOptions(options)
-      setShowJokers(true)
+      setShowVictory(true)
     } else if (deck.length === 0 && remaining.length === 0) {
       const newLives = lives - 1
       setLives(newLives)
@@ -82,6 +84,13 @@ function App() {
     setHand([...remaining, ...newCards])
     setDeck(newDeck)
     setSelected([])
+  }
+
+  function handleVictoryContinue() {
+    setShowVictory(false)
+    const options = getRandomJokers(2)
+    setJokerOptions(options)
+    setShowJokers(true)
   }
 
   function selectJoker(joker) {
@@ -107,8 +116,11 @@ function App() {
     setShowJokers(false)
     setGameOver(false)
     setLives(3)
+    setShowVictory(false)
     setInMenu(true)
   }
+
+  const detectedHand = evaluateHand(selected.map(i => hand[i]))
 
   return (
     <div className="app">
@@ -117,14 +129,15 @@ function App() {
       ) : (
         <>
           {gameOver && <GameOver score={score} onRestart={restart} />}
+          {showVictory && <Victory round={round} onContinue={handleVictoryContinue} />}
           {showJokers && <JokerSelection jokers={jokerOptions} onSelect={selectJoker} />}
 
           <header className="navbar">
             <span>Ronda {round}</span>
             <h1>Not Balatro</h1>
             <div className="navbar-right">
-              <span className="lives">{'♥'.repeat(lives)}</span>
-              <span>Cartas: {deck.length}</span>
+              <span className="lives">{'♥ '.repeat(lives).trim()}</span>
+              <span className="cards-left">Cartas: {deck.length}</span>
             </div>
           </header>
 
@@ -139,10 +152,8 @@ function App() {
                 <span className="score-number">{target}</span>
               </div>
               <div className="score-box">
-                <span className="score-label">Joker activo</span>
-                <span className="score-hand">
-                  {activeJoker ? activeJoker.name : '— ninguno'}
-                </span>
+                <span className="score-label">Mano</span>
+                <span className="score-hand">{detectedHand.name}</span>
               </div>
             </section>
 

@@ -5,7 +5,8 @@ export function getCardNumericValue(value) {
 }
 
 export function evaluateHand(cards) {
-  if (cards.length === 0) return { name: 'Sin mano', score: 0 }
+  if (cards.length === 0) return { name: 'Selecciona cartas', score: 0 }
+  if (cards.length === 1) return { name: 'Carta Alta', score: 5 }
 
   const values = cards.map(c => c.value)
   const suits = cards.map(c => c.suit)
