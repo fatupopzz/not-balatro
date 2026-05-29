@@ -2,10 +2,12 @@ import { useState } from 'react'
 import Menu from './components/Menu'
 import { createDeck, shuffleDeck } from './data/deck'
 import { getRandomJokers } from './data/jokers'
+import { evaluateHand } from './utils/handEvaluator'
+import { calculateScore } from './utils/scoreCalculator'
 import Card from './components/Card'
 import GameOver from './components/GameOver'
 import JokerSelection from './components/JokerSelection'
-import { evaluatePokerHand } from './utils/pokerHands'
+import Victory from './components/Victory'
 import './App.css'
 
 const DIFFICULTIES = {
@@ -41,17 +43,39 @@ function App() {
   const [gameOver, setGameOver] = useState(false)
   const [lastHand, setLastHand] = useState(null)
   const [lives, setLives] = useState(3)
+  const [showVictory, setShowVictory] = useState(false)
 
   function dealHand(currentDeck) {
     if (currentDeck.length < 8) {
       setGameOver(true)
       return
     }
+
     const newHand = currentDeck.slice(0, 8)
     const remaining = currentDeck.slice(8)
+
     setHand(newHand)
     setDeck(remaining)
     setSelected([])
+  }
+
+  function startGame() {
+    const newDeck = shuffleDeck(createDeck())
+    const selectedDifficulty = DIFFICULTIES[difficulty]
+
+    setDeck(newDeck.slice(8))
+    setHand(newDeck.slice(0, 8))
+    setSelected([])
+    setScore(0)
+    setTarget(selectedDifficulty.initialTarget)
+    setRound(1)
+    setActiveJoker(null)
+    setShowJokers(false)
+    setGameOver(false)
+    setLastHand(null)
+    setLives(3)
+    setShowVictory(false)
+    setInMenu(false)
   }
 
   function toggleCard(index) {
@@ -66,36 +90,28 @@ function App() {
     if (selected.length < 2) return
 
     const selectedCards = selected.map(i => hand[i])
-    const handResult = evaluatePokerHand(selectedCards)
-    let points = handResult.total
-
-    if (activeJoker) {
-      points = activeJoker.apply(points, selectedCards)
-    }
-
+    const handResult = evaluateHand(selectedCards)
+    const points = calculateScore(handResult, selectedCards, activeJoker)
     const newScore = score + points
     const remaining = hand.filter((_, i) => !selected.includes(i))
 
     const cardsNeeded = selected.length
     const newCards = deck.slice(0, cardsNeeded)
     const updatedDeck = deck.slice(cardsNeeded)
+    const updatedHand = [...remaining, ...newCards]
 
     setLastHand({
       name: handResult.name,
-      baseScore: handResult.baseScore,
-      multiplier: handResult.multiplier,
       total: points
     })
-    setHand([...remaining, ...newCards])
+    setHand(updatedHand)
     setDeck(updatedDeck)
     setSelected([])
     setScore(newScore)
 
     if (newScore >= target) {
-      const options = getRandomJokers(2)
-      setJokerOptions(options)
-      setShowJokers(true)
-    } else if (updatedDeck.length === 0 && [...remaining, ...newCards].length < 2) {
+      setShowVictory(true)
+    } else if (updatedDeck.length === 0 && updatedHand.length < 2) {
       if (lives <= 1) {
         setGameOver(true)
       } else {
@@ -123,12 +139,35 @@ function App() {
     setLastHand(null)
   }
 
+  function skip() {
+    if (deck.length < 8) {
+      setGameOver(true)
+      return
+    }
+
+    const newHand = deck.slice(0, 8)
+    const remaining = deck.slice(8)
+
+    setHand(newHand)
+    setDeck(remaining)
+    setSelected([])
+    setLastHand(null)
+  }
+
+  function handleVictoryContinue() {
+    setShowVictory(false)
+    const options = getRandomJokers(2)
+    setJokerOptions(options)
+    setShowJokers(true)
+  }
+
   function selectJoker(joker) {
+    const newDeck = shuffleDeck(createDeck())
+
     setActiveJoker(joker)
     setShowJokers(false)
     setRound(round + 1)
     setTarget(target + DIFFICULTIES[difficulty].targetIncrease)
-    const newDeck = shuffleDeck(createDeck())
     dealHand(newDeck)
     setDeck(newDeck.slice(8))
     setScore(0)
@@ -151,96 +190,107 @@ function App() {
     setGameOver(false)
     setLastHand(null)
     setLives(3)
+    setShowVictory(false)
   }
 
+  const detectedHand = evaluateHand(selected.map(i => hand[i]))
+
   return (
-  <div className="app">
-    {inMenu ? (
-      <Menu
-        onStart={() => {
-          setTarget(DIFFICULTIES[difficulty].initialTarget)
-          setInMenu(false)
-        }}
-        difficulty={difficulty}
-        onDifficultyChange={setDifficulty}
-      />
-    ) : (
-      <>
-        {gameOver && <GameOver score={score} onRestart={restart} />}
-        {showJokers && <JokerSelection jokers={jokerOptions} onSelect={selectJoker} />}
+    <div className="app">
+      {inMenu ? (
+        <Menu
+          onStart={startGame}
+          difficulty={difficulty}
+          onDifficultyChange={setDifficulty}
+        />
+      ) : (
+        <>
+          {gameOver && <GameOver score={score} onRestart={restart} />}
+          {showVictory && <Victory round={round} onContinue={handleVictoryContinue} />}
+          {showJokers && <JokerSelection jokers={jokerOptions} onSelect={selectJoker} />}
 
-        <header className="navbar">
-          <span>Ronda {round}</span>
-          <h1>Not Balatro</h1>
-          <span>Cartas: {deck.length}</span>
-        </header>
+          <header className="navbar">
+            <span>Ronda {round}</span>
+            <h1>Not Balatro</h1>
+            <div className="navbar-right">
+              <span className="lives">{'♥ '.repeat(lives).trim()}</span>
+              <span className="cards-left">Cartas: {deck.length}</span>
+            </div>
+          </header>
 
-        <main className="gameboard">
-          <section className="score-panel">
-            <div className="score-box">
-              <span className="score-label">Puntaje</span>
-              <span className="score-number">{score}</span>
-            </div>
-            <div className="score-box">
-              <span className="score-label">Objetivo</span>
-              <span className="score-number">{target}</span>
-            </div>
-            <div className="score-box">
-              <span className="score-label">Vidas</span>
-              <span className="score-number">{lives}</span>
-            </div>
-            <div className="score-box">
-              <span className="score-label">Dificultad</span>
-              <span className="score-hand">{DIFFICULTIES[difficulty].label}</span>
-            </div>
-            <div className="score-box">
-              <span className="score-label">Joker activo</span>
-              <span className="score-hand">
-                {activeJoker ? activeJoker.name : '— ninguno'}
-              </span>
-            </div>
-            <div className="score-box">
-              <span className="score-label">Última mano</span>
-              <span className="score-hand">
-                {lastHand ? `${lastHand.name} +${lastHand.total}` : '— sin jugar'}
-              </span>
-            </div>
-          </section>
-
-          <section className="hand-area">
-            <p className="hand-label">Tu mano — selecciona 2 a 5 cartas</p>
-            <div className="hand">
-              {hand.length === 0 ? (
-                <button onClick={() => dealHand(deck)}>Repartir cartas</button>
-              ) : (
-               hand.map((card, i) => (
-  <Card
-    key={i}
-    card={card}
-    index={i}
-    selected={selected.includes(i)}
-    onClick={() => toggleCard(i)}
-  />
-))
-              )}
-            </div>
-          </section>
-
-          {hand.length > 0 && (
-            <section className="actions">
-              <button onClick={playHand} disabled={selected.length < 2}>
-                Jugar mano
-              </button>
-              <button onClick={discard} disabled={selected.length === 0}>
-                Descartar
-              </button>
+          <main className="gameboard">
+            <section className="score-panel">
+              <div className="score-box">
+                <span className="score-label">Puntaje</span>
+                <span className="score-number">{score}</span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Objetivo</span>
+                <span className="score-number">{target}</span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Vidas</span>
+                <span className="score-number">{lives}</span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Dificultad</span>
+                <span className="score-hand">{DIFFICULTIES[difficulty].label}</span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Mano</span>
+                <span className="score-hand">{detectedHand.name}</span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Joker activo</span>
+                <span className="score-hand">
+                  {activeJoker ? activeJoker.name : '— ninguno'}
+                </span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Última mano</span>
+                <span className="score-hand">
+                  {lastHand ? `${lastHand.name} +${lastHand.total}` : '— sin jugar'}
+                </span>
+              </div>
             </section>
-          )}
-        </main>
-      </>
-    )}
-  </div>
-)
+
+            <section className="hand-area">
+              <p className="hand-label">Tu mano — selecciona 2 a 5 cartas</p>
+              <div className="hand">
+                {hand.length === 0 ? (
+                  <button onClick={() => dealHand(deck)}>Repartir cartas</button>
+                ) : (
+                  hand.map((card, i) => (
+                    <Card
+                      key={i}
+                      card={card}
+                      index={i}
+                      selected={selected.includes(i)}
+                      onClick={() => toggleCard(i)}
+                    />
+                  ))
+                )}
+              </div>
+            </section>
+
+            {hand.length > 0 && (
+              <section className="actions">
+                <button onClick={playHand} disabled={selected.length < 2}>
+                  Jugar mano
+                </button>
+                <button onClick={discard} disabled={selected.length === 0}>
+                  Descartar
+                </button>
+                <button onClick={skip}>
+                  Skip
+                </button>
+              </section>
+            )}
+          </main>
+        </>
+      )}
+    </div>
+  )
 }
 
 export default App
