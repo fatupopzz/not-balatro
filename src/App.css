@@ -57,60 +57,14 @@
   width: 100%;
 }
 
-/* ── Score panel ── */
-.score-panel {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.score-box {
-  flex: 1;
-  min-width: 100px;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  padding: 12px 10px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.score-label {
-  font-size: 10px;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-
-.score-number {
-  font-family: var(--font-title);
-  font-size: 28px;
-  letter-spacing: 2px;
-  line-height: 1;
-  color: var(--accent-yellow);
-}
-
-.score-remaining {
-  color: #e07a30;
-}
-
-.score-hand {
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.3;
-}
-
-.score-hand.highlight {
-  color: var(--text-bright);
-  font-size: 14px;
-}
+/* score-panel estilos en ScorePanel.css */
 
 /* ── Hand ── */
 .hand-area {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  position: relative;
 }
 
 .hand-label {
