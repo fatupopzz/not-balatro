@@ -3,6 +3,7 @@ import Menu from './components/Menu'
 import { createDeck, shuffleDeck } from './data/deck'
 import { getRandomJokers } from './data/jokers'
 import { evaluateHand } from './utils/handEvaluator'
+import { calculateScore } from './utils/scoreCalculator'
 import Card from './components/Card'
 import GameOver from './components/GameOver'
 import JokerSelection from './components/JokerSelection'
@@ -47,12 +48,8 @@ function App() {
   function playHand() {
     if (selected.length < 2) return
     const selectedCards = selected.map(i => hand[i])
-    const { score: handScore } = evaluateHand(selectedCards)
-    let points = handScore * 10
-
-    if (activeJoker) {
-      points = activeJoker.apply(points, selectedCards)
-    }
+    const handResult = evaluateHand(selectedCards)
+    const points = calculateScore(handResult, selectedCards, activeJoker)
 
     const newScore = score + points
     const remaining = hand.filter((_, i) => !selected.includes(i))
