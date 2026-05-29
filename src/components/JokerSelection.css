@@ -1,10 +1,8 @@
 .joker-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,14 +17,15 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 500px;
+  max-width: 520px;
   width: 90%;
 }
 
 .joker-box h2 {
-  font-size: 36px;
+  font-size: clamp(24px, 5vw, 36px);
   color: var(--accent-yellow);
-  letter-spacing: 4px;
+  letter-spacing: 3px;
+  word-break: break-word;
 }
 
 .joker-subtitle {
@@ -44,26 +43,27 @@
   flex: 1;
   background: var(--bg-card);
   border: 1px solid var(--border-accent);
-  padding: 20px 12px;
+  padding: 24px 14px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 10px;
   align-items: center;
-  transition: border-color 0.15s, background 0.15s;
+  transition: border-color 0.15s, background 0.15s, transform 0.15s;
 }
 
 .joker-card:hover {
   border-color: var(--accent-yellow);
-  background: #1f1a08;
+  background: rgba(200, 160, 32, 0.08);
+  transform: translateY(-4px);
 }
 
 .joker-icon {
-  font-size: 32px;
+  font-size: 36px;
 }
 
 .joker-name {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--text-bright);
   letter-spacing: 1px;
 }
@@ -72,4 +72,10 @@
   font-size: 12px;
   color: var(--text-muted);
   line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .joker-options {
+    flex-direction: column;
+  }
 }

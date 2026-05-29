@@ -1,69 +1,68 @@
 # Not Balatro
 
-A simplified roguelike card game inspired by Balatro, built with React + Vite.
+Version simplificada de Balatro construida con React + Vite.
 
-## About
+## Como jugar
 
-Not Balatro is a poker-based card game where you select cards to form poker hands, earn points, and try to reach the target score before running out of cards. Each round gets harder, but you can collect Jokers to boost your score.
+1. Elige dificultad en el menu principal y presiona **Iniciar Juego**
+2. Selecciona 2 a 5 cartas de tu mano para formar una mano de poker
+3. Presiona **Jugar mano** para sumar puntos
+4. Alcanza el **objetivo** de puntaje antes de quedarte sin cartas
+5. Si lo logras, elige un **Joker** para la siguiente ronda
+6. Si no alcanzas el objetivo y se acaban las cartas, pierdes una vida y recibes nueva baraja
+7. Sobrevive las 8 rondas para ganar
 
-## How to Play
+## Manos de poker
 
-1. Click **Start Game** from the main menu
-2. Click **Deal Cards** to receive 8 cards
-3. Select 2 to 5 cards to form a poker hand
-4. Click **Play Hand** to score points
-5. Reach the target score to advance to the next round
-6. Choose a **Joker** at the end of each round to boost future scores
-7. You have 3 lives — lose one every time you run out of cards without reaching the target
-8. Survive as many rounds as possible!
-
-## Poker Hands
-
-| Hand | Points |
-|------|--------|
-| High Card | 5 |
-| Pair | 15 |
-| Two Pair | 25 |
-| Three of a Kind | 40 |
-| Straight | 50 |
-| Flush | 60 |
+| Mano | Puntos base |
+|------|-------------|
+| Carta Alta | 5 |
+| Par | 15 |
+| Doble Par | 25 |
+| Trio | 40 |
+| Escalera | 50 |
+| Color | 60 |
 | Full House | 70 |
-| Four of a Kind | 80 |
-| Straight Flush | 100 |
+| Poker | 80 |
+| Escalera de Color | 100 |
 
-## Jokers
+El puntaje total = puntos de mano + suma de valores de cartas seleccionadas + efecto de joker.
 
-- Multiplicador — Multiplies total score x2
-- Bonus Fijo — Adds 50 points to total score
-- Corazon de Oro — Adds 30 points per heart card
-- Figuras Reales — Adds 25 points per face card (J, Q, K)
-- Triple Amenaza — Multiplies total score x3
-- Rey de Diamantes — Adds 40 points per diamond card
-- As de la Muerte — Adds 60 points per Ace
+## Jokers disponibles (8)
 
-## Features
+| Joker | Efecto |
+|-------|--------|
+| Multiplicador | x2 al puntaje |
+| Bonus Fijo | +50 puntos |
+| Corazon de Oro | +30 por cada corazon |
+| Figuras Reales | +25 por cada J, Q, K |
+| Escalera Arcana | +80 si tienes escalera |
+| Triple Amenaza | x3 al puntaje |
+| Rey de Diamantes | +40 por cada diamante |
+| As de la Muerte | +60 por cada As |
 
-- Full poker hand detection
-- 3 lives system
-- Joker selection between rounds
-- Victory and Game Over screens
-- Card deal animations
-- Responsive design
-- Skip and Discard mechanics
-- FNAF-inspired visual theme
+## Mecánicas adicionales
 
-## Tech Stack
+- **Descartar** — descarta cartas seleccionadas y toma nuevas del mazo
+- **Skip** — descarta la mano completa y toma 8 cartas nuevas
+- **Sistema de vidas** — 3 vidas por partida
+- **Dificultad** — Facil / Normal / Dificil (afecta objetivo inicial y aumento por ronda)
+- **8 rondas** — sobrevivir todas gana el juego
+
+## Tecnologias
 
 - React 19
 - Vite 8
-- CSS custom properties
-- No external UI libraries
+- CSS con custom properties
+- Sin librerias de UI externas
 
-## Run Locally
+## Instalar y correr
 
+```bash
 npm install
 npm run dev
+```
 
-## Authors
+## Creditos
 
 Universidad del Valle de Guatemala — Sistemas y Tecnologias Web, Semestre 1 2026

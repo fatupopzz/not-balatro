@@ -1,10 +1,10 @@
 import './Card.css'
 
 const SUIT_SYMBOLS = {
-  hearts: '♥',
+  hearts:   '♥',
   diamonds: '♦',
-  clubs: '♣',
-  spades: '♠'
+  clubs:    '♣',
+  spades:   '♠'
 }
 
 const RED_SUITS = ['hearts', 'diamonds']
@@ -17,7 +17,7 @@ function Card({ card, selected, onClick, index }) {
     <div
       className={`card ${isRed ? 'card-red' : 'card-black'} ${selected ? 'card-selected' : ''}`}
       onClick={onClick}
-      style={{ animationDelay: `${index * 0.05}s` }}
+      style={{ animationDelay: `${index * 0.04}s` }}
     >
       <div className="card-corner card-top-left">
         <span className="card-value">{card.value}</span>

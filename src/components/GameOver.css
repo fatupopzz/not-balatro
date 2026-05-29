@@ -1,10 +1,8 @@
 .gameover-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.85);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,23 +16,29 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   max-width: 400px;
   width: 90%;
 }
 
 .gameover-box h2 {
-  font-size: 52px;
+  font-size: clamp(32px, 7vw, 52px);
   color: var(--accent-glow);
-  letter-spacing: 6px;
+  letter-spacing: 4px;
+  word-break: break-word;
 }
 
 .gameover-score {
-  font-size: 18px;
+  font-size: 20px;
   color: var(--accent-yellow);
 }
 
+.gameover-round {
+  font-size: 15px;
+  color: var(--text-bright);
+}
+
 .gameover-msg {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-muted);
 }

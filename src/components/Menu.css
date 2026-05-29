@@ -4,30 +4,54 @@
   align-items: center;
   justify-content: center;
   background: var(--bg);
+  padding: 16px;
 }
 
 .menu-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
   text-align: center;
-  padding: 48px;
+  padding: 48px 40px;
   border: 2px solid var(--border-accent);
   background: var(--bg-panel);
+  max-width: 480px;
+  width: 100%;
 }
 
 .menu-title {
-  font-size: 72px;
+  font-size: 64px;
   color: var(--accent-yellow);
   letter-spacing: 8px;
   line-height: 1;
 }
 
 .menu-subtitle {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-muted);
   letter-spacing: 2px;
+}
+
+.menu-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--border);
+  padding: 16px;
+  text-align: left;
+  width: 100%;
+}
+
+.menu-rules p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.menu-rules p::before {
+  content: '→ ';
+  color: var(--accent-yellow);
 }
 
 .difficulty-selector {
@@ -35,26 +59,48 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  width: 100%;
 }
 
 .difficulty-selector label {
   color: var(--text-muted);
-  font-size: 14px;
-  letter-spacing: 2px;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
-.difficulty-selector select {
-  background: var(--bg-panel);
-  color: var(--accent-yellow);
-  border: 2px solid var(--accent-yellow);
-  padding: 10px 16px;
-  font-family: inherit;
-  font-size: 14px;
+.difficulty-options {
+  display: flex;
+  gap: 8px;
+}
+
+.diff-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  background: transparent;
   cursor: pointer;
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: all 0.15s;
 }
 
-.difficulty-selector select:hover {
-  background: rgba(209, 174, 35, 0.1);
+.diff-btn:hover {
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+  background: transparent;
+}
+
+.diff-active {
+  border-color: var(--accent-yellow) !important;
+  color: var(--accent-yellow) !important;
+  background: rgba(200, 160, 32, 0.1) !important;
+}
+
+.diff-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 .menu-btn {
@@ -73,15 +119,15 @@
   color: var(--bg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .menu-title {
-    font-size: 42px;
+    font-size: 40px;
     letter-spacing: 4px;
   }
 
   .menu-box {
-    padding: 32px 24px;
-    margin: 16px;
+    padding: 32px 20px;
+    gap: 18px;
   }
 
   .menu-btn {

@@ -41,24 +41,17 @@ export const JOKERS = [
         if (card.value === 'J') return 11
         return Number(card.value)
       })
-
-      const uniqueValues = [...new Set(values)].sort((a, b) => a - b)
-
-      if (uniqueValues.includes(14)) {
-        uniqueValues.unshift(1)
-      }
-
+      const unique = [...new Set(values)].sort((a, b) => a - b)
+      if (unique.includes(14)) unique.unshift(1)
       let streak = 1
-
-      for (let i = 1; i < uniqueValues.length; i += 1) {
-        if (uniqueValues[i] === uniqueValues[i - 1] + 1) {
-          streak += 1
+      for (let i = 1; i < unique.length; i++) {
+        if (unique[i] === unique[i - 1] + 1) {
+          streak++
           if (streak >= 5) return score + 80
         } else {
           streak = 1
         }
       }
-
       return score
     }
   },

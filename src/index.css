@@ -17,8 +17,9 @@
   --accent-red: #8b1a1a;
   --accent-yellow: #c8a020;
   --accent-glow: #ff4444;
-  --font-title: 'FiveNights', sans-serif;
-  --font-body: 'FiveNights', sans-serif;
+  /* Si la fuente custom no carga, usa Georgia como fallback legible */
+  --font-title: 'FiveNights', Georgia, serif;
+  --font-body: 'FiveNights', Georgia, serif;
 }
 
 * {
@@ -50,14 +51,20 @@ button {
   background: var(--bg-card);
   color: var(--text-bright);
   border: 1px solid var(--border-accent);
-  padding: 8px 20px;
+  padding: 10px 20px;
   cursor: pointer;
   font-size: 14px;
   letter-spacing: 1px;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background: var(--accent-red);
   border-color: var(--accent-glow);
   color: #fff;
+}
+
+button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }

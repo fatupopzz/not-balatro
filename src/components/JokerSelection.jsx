@@ -4,8 +4,8 @@ function JokerSelection({ jokers, onSelect }) {
   return (
     <div className="joker-overlay">
       <div className="joker-box">
-        <h2>Elige un Comodín</h2>
-        <p className="joker-subtitle">Selecciona uno para la siguiente ronda</p>
+        <h2>Elige un Comodin</h2>
+        <p className="joker-subtitle">Selecciona uno para potenciar la siguiente ronda</p>
         <div className="joker-options">
           {jokers.map((joker) => (
             <div
