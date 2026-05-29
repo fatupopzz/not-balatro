@@ -1,68 +1,73 @@
 # Not Balatro
 
-Version simplificada de Balatro construida con React + Vite.
+A simplified roguelike card game inspired by Balatro, built with React + Vite.
 
-## Como jugar
+## How to Play
 
-1. Elige dificultad en el menu principal y presiona **Iniciar Juego**
-2. Selecciona 2 a 5 cartas de tu mano para formar una mano de poker
-3. Presiona **Jugar mano** para sumar puntos
-4. Alcanza el **objetivo** de puntaje antes de quedarte sin cartas
-5. Si lo logras, elige un **Joker** para la siguiente ronda
-6. Si no alcanzas el objetivo y se acaban las cartas, pierdes una vida y recibes nueva baraja
-7. Sobrevive las 8 rondas para ganar
+1. Choose a difficulty level in the main menu and press **Start Game**
+2. Select 2 to 5 cards from your hand to form a poker hand
+3. Press **Play Hand** to score points
+4. Reach the **target score** before running out of cards
+5. If you succeed, choose a **Joker** for the next round
+6. If you run out of cards without reaching the target, you lose a life and get a new deck
+7. Survive all 8 rounds to win
 
-## Manos de poker
+## Poker Hands
 
-| Mano | Puntos base |
+| Hand | Base Points |
 |------|-------------|
-| Carta Alta | 5 |
-| Par | 15 |
-| Doble Par | 25 |
-| Trio | 40 |
-| Escalera | 50 |
-| Color | 60 |
+| High Card | 5 |
+| Pair | 15 |
+| Two Pair | 25 |
+| Three of a Kind | 40 |
+| Straight | 50 |
+| Flush | 60 |
 | Full House | 70 |
-| Poker | 80 |
-| Escalera de Color | 100 |
+| Four of a Kind | 80 |
+| Straight Flush | 100 |
 
-El puntaje total = puntos de mano + suma de valores de cartas seleccionadas + efecto de joker.
+Total score = hand points + sum of selected card values + active joker effect.
 
-## Jokers disponibles (8)
+## Jokers (8 available)
 
-| Joker | Efecto |
+| Joker | Effect |
 |-------|--------|
-| Multiplicador | x2 al puntaje |
-| Bonus Fijo | +50 puntos |
-| Corazon de Oro | +30 por cada corazon |
-| Figuras Reales | +25 por cada J, Q, K |
-| Escalera Arcana | +80 si tienes escalera |
-| Triple Amenaza | x3 al puntaje |
-| Rey de Diamantes | +40 por cada diamante |
-| As de la Muerte | +60 por cada As |
+| Multiplier | x2 total score |
+| Fixed Bonus | +50 points |
+| Golden Heart | +30 per heart card |
+| Royal Figures | +25 per face card (J, Q, K) |
+| Arcane Straight | +80 if hand contains a straight |
+| Triple Threat | x3 total score |
+| King of Diamonds | +40 per diamond card |
+| Ace of Death | +60 per Ace |
 
-## Mecánicas adicionales
+## Additional Features
 
-- **Descartar** — descarta cartas seleccionadas y toma nuevas del mazo
-- **Skip** — descarta la mano completa y toma 8 cartas nuevas
-- **Sistema de vidas** — 3 vidas por partida
-- **Dificultad** — Facil / Normal / Dificil (afecta objetivo inicial y aumento por ronda)
-- **8 rondas** — sobrevivir todas gana el juego
+- **Discard** — discard selected cards and draw new ones from the deck
+- **Skip** — discard the full hand and draw 8 new cards
+- **Lives system** — 3 lives per game
+- **Difficulty levels** — Easy / Normal / Hard (affects starting target and round increase)
+- **8 rounds** — survive them all to win
+- **Joker selection** — choose a power-up between rounds
+- **Round fail screen** — clear feedback when a round is lost
+- **Victory screen** — shown when the target score is reached
+- **Responsive design** — works on desktop and mobile
 
-## Tecnologias
+## Tech Stack
 
 - React 19
 - Vite 8
-- CSS con custom properties
-- Sin librerias de UI externas
+- CSS custom properties
+- No external UI libraries
+- Card assets: svg-cards by htdebeer (LGPL)
 
-## Instalar y correr
+## Getting Started
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Creditos
+## Credits
 
-Universidad del Valle de Guatemala — Sistemas y Tecnologias Web, Semestre 1 2026
+Universidad del Valle de Guatemala — Web Systems and Technologies, Semester 1 2026
