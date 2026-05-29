@@ -10,18 +10,38 @@ import JokerSelection from './components/JokerSelection'
 import Victory from './components/Victory'
 import './App.css'
 
+const DIFFICULTIES = {
+  easy: {
+    label: 'Fácil',
+    initialTarget: 80,
+    targetIncrease: 40
+  },
+  normal: {
+    label: 'Normal',
+    initialTarget: 100,
+    targetIncrease: 50
+  },
+  hard: {
+    label: 'Difícil',
+    initialTarget: 130,
+    targetIncrease: 70
+  }
+}
+
 function App() {
   const [inMenu, setInMenu] = useState(true)
   const [deck, setDeck] = useState(() => shuffleDeck(createDeck()))
   const [hand, setHand] = useState([])
   const [selected, setSelected] = useState([])
   const [score, setScore] = useState(0)
-  const [target, setTarget] = useState(100)
+  const [difficulty, setDifficulty] = useState('normal')
+  const [target, setTarget] = useState(DIFFICULTIES.normal.initialTarget)
   const [round, setRound] = useState(1)
   const [activeJoker, setActiveJoker] = useState(null)
   const [showJokers, setShowJokers] = useState(false)
   const [jokerOptions, setJokerOptions] = useState([])
   const [gameOver, setGameOver] = useState(false)
+  const [lastHand, setLastHand] = useState(null)
   const [lives, setLives] = useState(3)
   const [showVictory, setShowVictory] = useState(false)
 
@@ -30,11 +50,32 @@ function App() {
       setGameOver(true)
       return
     }
+
     const newHand = currentDeck.slice(0, 8)
     const remaining = currentDeck.slice(8)
+
     setHand(newHand)
     setDeck(remaining)
     setSelected([])
+  }
+
+  function startGame() {
+    const newDeck = shuffleDeck(createDeck())
+    const selectedDifficulty = DIFFICULTIES[difficulty]
+
+    setDeck(newDeck.slice(8))
+    setHand(newDeck.slice(0, 8))
+    setSelected([])
+    setScore(0)
+    setTarget(selectedDifficulty.initialTarget)
+    setRound(1)
+    setActiveJoker(null)
+    setShowJokers(false)
+    setGameOver(false)
+    setLastHand(null)
+    setLives(3)
+    setShowVictory(false)
+    setInMenu(false)
   }
 
   function toggleCard(index) {
@@ -47,40 +88,55 @@ function App() {
 
   function playHand() {
     if (selected.length < 2) return
+
     const selectedCards = selected.map(i => hand[i])
     const handResult = evaluateHand(selectedCards)
     const points = calculateScore(handResult, selectedCards, activeJoker)
-
     const newScore = score + points
     const remaining = hand.filter((_, i) => !selected.includes(i))
-    setHand(remaining)
+
+    const cardsNeeded = selected.length
+    const newCards = deck.slice(0, cardsNeeded)
+    const updatedDeck = deck.slice(cardsNeeded)
+    const updatedHand = [...remaining, ...newCards]
+
+    setLastHand({
+      name: handResult.name,
+      total: points
+    })
+    setHand(updatedHand)
+    setDeck(updatedDeck)
     setSelected([])
     setScore(newScore)
 
     if (newScore >= target) {
       setShowVictory(true)
-    } else if (deck.length === 0 && remaining.length === 0) {
-      const newLives = lives - 1
-      setLives(newLives)
-      if (newLives <= 0) {
+    } else if (updatedDeck.length === 0 && updatedHand.length < 2) {
+      if (lives <= 1) {
         setGameOver(true)
       } else {
         const newDeck = shuffleDeck(createDeck())
+        setLives(lives - 1)
+        setScore(0)
+        setLastHand(null)
         dealHand(newDeck)
         setDeck(newDeck.slice(8))
-        setScore(0)
       }
     }
   }
 
   function discard() {
     if (selected.length === 0) return
+
     const remaining = hand.filter((_, i) => !selected.includes(i))
-    const newCards = deck.slice(0, selected.length)
-    const newDeck = deck.slice(selected.length)
+    const cardsToDraw = Math.min(selected.length, deck.length)
+    const newCards = deck.slice(0, cardsToDraw)
+    const newDeck = deck.slice(cardsToDraw)
+
     setHand([...remaining, ...newCards])
     setDeck(newDeck)
     setSelected([])
+    setLastHand(null)
   }
 
   function skip() {
@@ -88,11 +144,14 @@ function App() {
       setGameOver(true)
       return
     }
+
     const newHand = deck.slice(0, 8)
     const remaining = deck.slice(8)
+
     setHand(newHand)
     setDeck(remaining)
     setSelected([])
+    setLastHand(null)
   }
 
   function handleVictoryContinue() {
@@ -103,30 +162,35 @@ function App() {
   }
 
   function selectJoker(joker) {
+    const newDeck = shuffleDeck(createDeck())
+
     setActiveJoker(joker)
     setShowJokers(false)
     setRound(round + 1)
-    setTarget(target + 50)
-    const newDeck = shuffleDeck(createDeck())
+    setTarget(target + DIFFICULTIES[difficulty].targetIncrease)
     dealHand(newDeck)
     setDeck(newDeck.slice(8))
     setScore(0)
+    setLastHand(null)
   }
 
   function restart() {
     const newDeck = shuffleDeck(createDeck())
-    setDeck(newDeck)
-    setHand([])
+    const newHand = newDeck.slice(0, 8)
+    const remainingDeck = newDeck.slice(8)
+
+    setDeck(remainingDeck)
+    setHand(newHand)
     setSelected([])
     setScore(0)
-    setTarget(100)
+    setTarget(DIFFICULTIES[difficulty].initialTarget)
     setRound(1)
     setActiveJoker(null)
     setShowJokers(false)
     setGameOver(false)
+    setLastHand(null)
     setLives(3)
     setShowVictory(false)
-    setInMenu(true)
   }
 
   const detectedHand = evaluateHand(selected.map(i => hand[i]))
@@ -134,7 +198,11 @@ function App() {
   return (
     <div className="app">
       {inMenu ? (
-        <Menu onStart={() => setInMenu(false)} />
+        <Menu
+          onStart={startGame}
+          difficulty={difficulty}
+          onDifficultyChange={setDifficulty}
+        />
       ) : (
         <>
           {gameOver && <GameOver score={score} onRestart={restart} />}
@@ -161,8 +229,28 @@ function App() {
                 <span className="score-number">{target}</span>
               </div>
               <div className="score-box">
+                <span className="score-label">Vidas</span>
+                <span className="score-number">{lives}</span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Dificultad</span>
+                <span className="score-hand">{DIFFICULTIES[difficulty].label}</span>
+              </div>
+              <div className="score-box">
                 <span className="score-label">Mano</span>
                 <span className="score-hand">{detectedHand.name}</span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Joker activo</span>
+                <span className="score-hand">
+                  {activeJoker ? activeJoker.name : '— ninguno'}
+                </span>
+              </div>
+              <div className="score-box">
+                <span className="score-label">Última mano</span>
+                <span className="score-hand">
+                  {lastHand ? `${lastHand.name} +${lastHand.total}` : '— sin jugar'}
+                </span>
               </div>
             </section>
 

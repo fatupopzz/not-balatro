@@ -80,6 +80,9 @@
 .score-number {
   font-family: var(--font-title);
   font-size: 32px;
+  letter-spacing: 2px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
   color: var(--accent-yellow);
 }
 
