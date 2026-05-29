@@ -86,6 +86,18 @@ function App() {
     setSelected([])
   }
 
+  function skip() {
+    if (deck.length < 8) {
+      setGameOver(true)
+      return
+    }
+    const newHand = deck.slice(0, 8)
+    const remaining = deck.slice(8)
+    setHand(newHand)
+    setDeck(remaining)
+    setSelected([])
+  }
+
   function handleVictoryContinue() {
     setShowVictory(false)
     const options = getRandomJokers(2)
@@ -183,6 +195,9 @@ function App() {
                 </button>
                 <button onClick={discard} disabled={selected.length === 0}>
                   Descartar
+                </button>
+                <button onClick={skip}>
+                  Skip
                 </button>
               </section>
             )}
