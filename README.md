@@ -68,6 +68,9 @@ npm install
 npm run dev
 ```
 
+## VIdeo on YouTube 
+https://youtu.be/L4M2TQrnk9c
+
 ## Credits
 
 Universidad del Valle de Guatemala — Web Systems and Technologies, Semester 1 2026
