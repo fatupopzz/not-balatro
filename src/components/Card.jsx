@@ -1,6 +1,5 @@
 import './Card.css'
 
-// Mapeo de suit/value del juego al nombre de archivo PNG
 const SUIT_MAP = {
   hearts:   'heart',
   diamonds: 'diamond',
@@ -27,12 +26,10 @@ const VALUE_MAP = {
 function getCardImage(card) {
   const suit = SUIT_MAP[card.suit]
   const value = VALUE_MAP[card.value]
-  return `/cards/${suit}_${value}.png`
+  return `${import.meta.env.BASE_URL}cards/${suit}_${value}.png`
 }
 
 function Card({ card, selected, onClick, index }) {
-  const imgSrc = getCardImage(card)
-
   return (
     <div
       className={`card ${selected ? 'card-selected' : ''}`}
@@ -40,7 +37,7 @@ function Card({ card, selected, onClick, index }) {
       style={{ animationDelay: `${index * 0.04}s` }}
     >
       <img
-        src={imgSrc}
+        src={getCardImage(card)}
         alt={`${card.value} of ${card.suit}`}
         className="card-img"
         draggable={false}
